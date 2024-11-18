@@ -28,3 +28,4 @@ add_library(libcrunch
 target_include_directories(libcrunch PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 
 add_executable(crunch crunch/main.cpp)
+target_link_libraries(crunch PRIVATE libcrunch)
