@@ -25,6 +25,6 @@ add_library(libcrunch
     crunch/str.hpp
     crunch/tinydir.h
 )
-target_include_directories(libcrunch "${CMAKE_CURRENT_SOURCE_DIR}")
+target_include_directories(libcrunch PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 
 add_executable(crunch crunch/main.cpp)
