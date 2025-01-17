@@ -29,7 +29,6 @@
 
 #include <string>
 #include <cstdint>
-#include <vector>
 
 using namespace std;
 
@@ -46,8 +45,11 @@ struct Bitmap
     size_t hashValue;
     Bitmap(const string& file, const string& name, bool premultiply, bool trim);
     Bitmap(int width, int height);
+    Bitmap(Bitmap &&other) noexcept;
+    Bitmap &operator =(Bitmap &&other) noexcept;
     ~Bitmap();
-    void SaveAs(const string& file);
+    bool SaveAs(const string& file) const;
+    void *ToPng(size_t *outsize) const;
     void CopyPixels(const Bitmap* src, int tx, int ty);
     void CopyPixelsRot(const Bitmap* src, int tx, int ty);
     bool Equals(const Bitmap* other) const;

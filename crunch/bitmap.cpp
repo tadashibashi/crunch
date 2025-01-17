@@ -149,12 +149,47 @@ Bitmap::Bitmap(int width, int height)
     data = reinterpret_cast<uint32_t*>(calloc(width * height, sizeof(uint32_t)));
 }
 
+Bitmap::Bitmap(Bitmap &&other) noexcept :
+    name(std::move(other.name)),
+    data(other.data),
+    frameX(other.frameX),
+    frameY(other.frameY),
+    frameW(other.frameW),
+    frameH(other.frameH),
+    hashValue(other.hashValue),
+    width(other.width),
+    height(other.height)
+{
+    other.data = nullptr;
+}
+
+Bitmap &Bitmap::operator =(Bitmap &&other) noexcept
+{
+    if (this == &other) return *this;
+
+    if (data)
+        free(data);
+
+    name = std::move(other.name);
+    data = other.data;
+    frameX = other.frameX;
+    frameY = other.frameY;
+    frameW = other.frameW;
+    frameH = other.frameH;
+    hashValue = other.hashValue;
+    width = other.width;
+    height = other.height;
+
+    other.data = nullptr;
+    return *this;
+}
+
 Bitmap::~Bitmap()
 {
     free(data);
 }
 
-void Bitmap::SaveAs(const string& file)
+bool Bitmap::SaveAs(const string& file) const
 {
     unsigned char* pdata = reinterpret_cast<unsigned char*>(data);
     unsigned int pw = static_cast<unsigned int>(width);
@@ -162,8 +197,27 @@ void Bitmap::SaveAs(const string& file)
     if (lodepng_encode32_file(file.data(), pdata, pw, ph))
     {
         cout << "failed to save png: " << file << endl;
-        exit(EXIT_FAILURE);
+        return false;
     }
+
+    return true;
+}
+
+void *Bitmap::ToPng(size_t *outsize) const
+{
+    unsigned char *outdata;
+    if (lodepng_encode32(
+        &outdata,
+        outsize,
+        reinterpret_cast<unsigned char *>(data),
+        static_cast<unsigned int>(width),
+        static_cast<unsigned int>(height)) != 0)
+    {
+        cout << "failed to convert bitmap to png\n";
+        return nullptr;
+    }
+
+    return outdata;
 }
 
 void Bitmap::CopyPixels(const Bitmap* src, int tx, int ty)

@@ -26,7 +26,6 @@
 
 #include "packer.hpp"
 #include "MaxRectsBinPack.h"
-#include "GuillotineBinPack.h"
 #include "binary.hpp"
 #include <iostream>
 #include <algorithm>
@@ -100,7 +99,7 @@ void Packer::Pack(vector<Bitmap*>& bitmaps, bool verbose, bool unique, bool rota
         height /= 2;
 }
 
-void Packer::SavePng(const string& file)
+Bitmap Packer::GetBitmap() const
 {
     Bitmap bitmap(width, height);
     for (size_t i = 0, j = bitmaps.size(); i < j; ++i)
@@ -113,7 +112,13 @@ void Packer::SavePng(const string& file)
                 bitmap.CopyPixels(bitmaps[i], points[i].x, points[i].y);
         }
     }
-    bitmap.SaveAs(file);
+
+    return bitmap;
+}
+
+void Packer::SavePng(const string& file)
+{
+    GetBitmap().SaveAs(file);
 }
 
 void Packer::SaveXml(const string& name, ofstream& xml, bool trim, bool rotate)

@@ -55,6 +55,7 @@ struct Packer
     Packer(int width, int height, int pad);
     void Pack(vector<Bitmap*>& bitmaps, bool verbose, bool unique, bool rotate);
     void SavePng(const string& file);
+    Bitmap GetBitmap() const;
     void SaveXml(const string& name, ofstream& xml, bool trim, bool rotate);
     void SaveBin(const string& name, ofstream& bin, bool trim, bool rotate);
     void SaveJson(const string& name, ofstream& json, bool trim, bool rotate);
