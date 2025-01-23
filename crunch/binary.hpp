@@ -27,15 +27,15 @@
 #ifndef binary_hpp
 #define binary_hpp
 
-#include <fstream>
+#include <iosfwd>
 #include <string>
 
 using namespace std;
 
-void WriteString(ofstream& bin, const string& value);
-void WriteShort(ofstream& bin, int16_t value);
-void WriteByte(ofstream& bin, char value);
-string ReadString(ifstream& bin);
-int16_t ReadShort(ifstream& bin);
+void WriteString(ostream& bin, const string& value);
+void WriteShort(ostream& bin, int16_t value);
+void WriteByte(ostream& bin, char value);
+string ReadString(istream& bin);
+int16_t ReadShort(istream& bin);
 
 #endif
